@@ -18,9 +18,10 @@
 
 var winston = require('winston');
 var log = require('winston-rsyslog2').Syslog;
+var env = process.env.NODE_ENV;
 
 module.exports = function setup(options) {
-
+  
   var transports = [];
   var transportName;
 
@@ -41,6 +42,21 @@ module.exports = function setup(options) {
   var logger = new (winston.Logger)({
     transports: transports
   });
+
+  if (env === 'unitTests') {
+    logger.debug = function () {
+      return;
+    };
+    logger.info = function () {
+      return;
+    };
+    logger.error = function () {
+      return;
+    };
+    logger.log = function () {
+      return;
+    };
+  }
 
   return logger;
 };
